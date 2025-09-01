@@ -1,54 +1,43 @@
 public class lt_06_ZigzagConversion {
-    public String convert(String s, int numRows) {
-        if (numRows == 1 || s.length() <= numRows) {
-            return s;
-        }
 
-        StringBuilder[] rows = new StringBuilder[numRows];
-        for (int i = 0; i < numRows; i++) {
-            rows[i] = new StringBuilder();
-        }
+    static class Solution {
+        public String convert(String s, int numRows) {
+            if (numRows == 1 || s.length() <= numRows) return s;
 
-        int currentRow = 0;
-        boolean goingDown = false;
+            StringBuilder[] rows = new StringBuilder[numRows];
+            for (int i = 0; i < numRows; i++) rows[i] = new StringBuilder();
 
-        for (char c : s.toCharArray()) {
-            rows[currentRow].append(c);
-
-            if (currentRow == 0 || currentRow == numRows - 1) {
-                goingDown = !goingDown;
+            int r = 0;
+            int dir = 1; // 1: 往下, -1: 往上
+            for (char c : s.toCharArray()) {
+                rows[r].append(c);
+                if (r == 0) dir = 1;
+                else if (r == numRows - 1) dir = -1;
+                r += dir;
             }
 
-            currentRow += goingDown ? 1 : -1;
+            StringBuilder ans = new StringBuilder();
+            for (StringBuilder sb : rows) ans.append(sb);
+            return ans.toString();
         }
-
-        StringBuilder result = new StringBuilder();
-        for (StringBuilder row : rows) {
-            result.append(row);
-        }
-
-        return result.toString();
     }
 
+    // 測試主程式
     public static void main(String[] args) {
-        lt_06_ZigzagConversion converter = new lt_06_ZigzagConversion();
+        Solution sol = new Solution();
 
-        // Example 1
-        String input1 = "PAYPALISHIRING";
-        int rows1 = 3;
-        System.out.println("Input: \"" + input1 + "\", numRows = " + rows1);
-        System.out.println("Output: \"" + converter.convert(input1, rows1) + "\"");
+        String s1 = "PAYPALISHIRING";
+        int numRows1 = 3;
+        System.out.println("Input: " + s1 + ", numRows=" + numRows1);
+        System.out.println("Output: " + sol.convert(s1, numRows1)); // 預期: "PAHNAPLSIIGYIR"
 
-        // Example 2
-        String input2 = "PAYPALISHIRING";
-        int rows2 = 4;
-        System.out.println("Input: \"" + input2 + "\", numRows = " + rows2);
-        System.out.println("Output: \"" + converter.convert(input2, rows2) + "\"");
+        int numRows2 = 4;
+        System.out.println("Input: " + s1 + ", numRows=" + numRows2);
+        System.out.println("Output: " + sol.convert(s1, numRows2)); // 預期: "PINALSIGYAHRPI"
 
-        // Example 3
-        String input3 = "A";
-        int rows3 = 1;
-        System.out.println("Input: \"" + input3 + "\", numRows = " + rows3);
-        System.out.println("Output: \"" + converter.convert(input3, rows3) + "\"");
+        String s2 = "A";
+        int numRows3 = 1;
+        System.out.println("Input: " + s2 + ", numRows=" + numRows3);
+        System.out.println("Output: " + sol.convert(s2, numRows3)); // 預期: "A"
     }
 }
